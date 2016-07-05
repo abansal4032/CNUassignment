@@ -1,0 +1,4 @@
+2,AC,ON
+3,WH,ON
+5,CO,ON
+4,AC,OFF
