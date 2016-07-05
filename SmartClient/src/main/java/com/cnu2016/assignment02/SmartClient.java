@@ -4,29 +4,28 @@ import java.util.*;
 
 enum status { ON, OFF };
 
-class Appliance {
-    
-    private status CurrStatus;
-    
-    public Appliance(status stat) {
-        this.CurrStatus = stat;
-    }
-    
-    public status getStatus() {
-        return this.CurrStatus;
-    }
-    
-    public void setStatus(status stat) {
-        this.CurrStatus = stat;
-    }
-    
-}
 
 public class SmartClient {
-        public static void main(String[] argvs) {
-        try{
+    
+     
+     static void printStatus(status ACstatus, status WHstatus, status COstatus, long time)  {
+            System.out.println("At time " + time);
+            System.out.println("AC status " + ACstatus);
+            System.out.println("WH status " + WHstatus);
+            System.out.println("CO status " + COstatus);
+    }
+        
+        static void dotimer(Timer timer, TimerTask task, long time){//final Appliance AC, final Appliance WH, final Appliance CO, final String device, final status StatusToBe, final long time) {
+                timer.schedule(task, time*1000);
+            
+        }
+        
+        static ArrayList<String> ReadFile(String file) {
             ArrayList<String> CommandArray = new ArrayList<String>();
-            FileInputStream fstream = new FileInputStream("textfile.txt");
+
+            try{
+            
+            FileInputStream fstream = new FileInputStream(file);
             // Get the object of DataInputStream
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -36,14 +35,33 @@ public class SmartClient {
                 
                 CommandArray.add(strLine);
             }
+           
+        }catch(Exception e){//Catch exception
+            System.err.println("Error: " + e.getMessage());
+        }
+        /*String listString = "";
+            for(int i=0;i<CommandArray.size();i++){
+            String s = CommandArray.get(i);
+            listString += s;
+        }
+        System.out.println(listString);*/
+        return CommandArray;
+        }
+        
+        public static void main(String[] argvs) {
+        try{
+            final Appliance AC = new Appliance(status.OFF);
+            final Appliance WH = new Appliance(status.OFF);
+            final Appliance CO = new Appliance(status.OFF);
+        ArrayList<String> CommandArray = ReadFile("textfile.txt");
         Collections.sort(CommandArray.subList(1, CommandArray.size()));
         //Get an instance for each Appliance
-        final Appliance AC = new Appliance(status.OFF);
-        final Appliance WH = new Appliance(status.OFF);
-        final Appliance CO = new Appliance(status.OFF);
-        
-        for (String s: CommandArray) {
-            Timer timer = new Timer();
+
+        Timer timer = new Timer();
+        //for (String s: CommandArray) 
+        for(int i=0;i<CommandArray.size();i++){
+            String s = CommandArray.get(i);
+            
             String[] Command = s.split(","); 
             final long time = Long.valueOf(Command[0]).longValue();
             final String device = Command[1];
@@ -53,7 +71,7 @@ public class SmartClient {
                 StatusToBe = status.ON;
             else
                 StatusToBe = status.OFF;
-            timer.schedule(new TimerTask() {
+                dotimer(timer,  new TimerTask() {
                 @Override
                 //Check and display only if there is an actual change in status
                 public void run() {
@@ -63,13 +81,12 @@ public class SmartClient {
                     WH.setStatus(StatusToBe);
                 if(device.equals("CO"))
                     CO.setStatus(StatusToBe);
-                System.out.println("At time " + time);
-                System.out.println("AC status " + AC.getStatus());
-                System.out.println("WH status " + WH.getStatus());
-                System.out.println("CO status " + CO.getStatus());
-            }}, time*1000);
+                printStatus(AC.getStatus(), WH.getStatus(), CO.getStatus(), time);
+            }}, time);
+
             }
-            
+            Thread.sleep(10000);
+            timer.cancel();
         }catch (Exception e){//Catch exception
             System.err.println("Error: " + e.getMessage());
         }
