@@ -4,15 +4,18 @@ import java.util.*;
 
 enum status { ON, OFF };
 
-
 public class SmartClient {
     
+     static String Status = "";
      
-     static void printStatus(status ACstatus, status WHstatus, status COstatus, long time)  {
+     static String printStatus(status ACstatus, status WHstatus, status COstatus, long time)  {
+            String StatusString = "";
             System.out.println("At time " + time);
             System.out.println("AC status " + ACstatus);
             System.out.println("WH status " + WHstatus);
             System.out.println("CO status " + COstatus);
+            StatusString += "At time " + time + " AC status " + ACstatus + " WH status " + WHstatus + " CO status " + COstatus;
+            return StatusString;
     }
         
         static void dotimer(Timer timer, TimerTask task, long time){//final Appliance AC, final Appliance WH, final Appliance CO, final String device, final status StatusToBe, final long time) {
@@ -20,11 +23,8 @@ public class SmartClient {
             
         }
         
-        static ArrayList<String> ReadFile(String file) {
+        static ArrayList<String> ReadFile(String file) throws IOException{
             ArrayList<String> CommandArray = new ArrayList<String>();
-
-            try{
-            
             FileInputStream fstream = new FileInputStream(file);
             // Get the object of DataInputStream
             DataInputStream in = new DataInputStream(fstream);
@@ -32,36 +32,26 @@ public class SmartClient {
             String strLine;
             //Read File Line By Line
             while ((strLine = br.readLine()) != null)   {
-                
                 CommandArray.add(strLine);
             }
            
-        }catch(Exception e){//Catch exception
-            System.err.println("Error: " + e.getMessage());
-        }
-        /*String listString = "";
-            for(int i=0;i<CommandArray.size();i++){
-            String s = CommandArray.get(i);
-            listString += s;
-        }
-        System.out.println(listString);*/
         return CommandArray;
         }
         
-        public static void main(String[] argvs) {
-        try{
+        public static void main(String[] argvs) throws Exception{
+            String Status = Client("textfile.txt");
+        }
+
+        static String Client(String TextFile) throws IOException, InterruptedException{
+            //Get an instance for each Appliance
             final Appliance AC = new Appliance(status.OFF);
             final Appliance WH = new Appliance(status.OFF);
             final Appliance CO = new Appliance(status.OFF);
-        ArrayList<String> CommandArray = ReadFile("textfile.txt");
+        ArrayList<String> CommandArray = ReadFile(TextFile);
         Collections.sort(CommandArray.subList(1, CommandArray.size()));
-        //Get an instance for each Appliance
-
         Timer timer = new Timer();
-        //for (String s: CommandArray) 
         for(int i=0;i<CommandArray.size();i++){
             String s = CommandArray.get(i);
-            
             String[] Command = s.split(","); 
             final long time = Long.valueOf(Command[0]).longValue();
             final String device = Command[1];
@@ -81,15 +71,13 @@ public class SmartClient {
                     WH.setStatus(StatusToBe);
                 if(device.equals("CO"))
                     CO.setStatus(StatusToBe);
-                printStatus(AC.getStatus(), WH.getStatus(), CO.getStatus(), time);
-            }}, time);
-
+                Status += printStatus(AC.getStatus(), WH.getStatus(), CO.getStatus(), time);
+                }}, time);
             }
             Thread.sleep(10000);
             timer.cancel();
-        }catch (Exception e){//Catch exception
-            System.err.println("Error: " + e.getMessage());
-        }
+
+        return Status;
         
 }
 
