@@ -1,7 +1,7 @@
 package com.cnu2016.assignment04.Models;
 
 import javax.persistence.*;
-
+import java.util.*;
 
 @Entity(name = "products")
 public class product {
@@ -16,10 +16,15 @@ public class product {
     @Column(name = "productDescription")
     private String description;
     private String productName;
-    private String buyPrice;
+    private Float buyPrice;
     private Integer quantityInStock;
     private Integer categoryId;
     private Integer enabled;
+
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Integer getEnabled() {
         return enabled;
@@ -61,11 +66,11 @@ public class product {
         this.description = productDescription;
     }
 
-    public String getBuyPrice() {
+    public Float getBuyPrice() {
         return buyPrice;
     }
 
-    public void setBuyPrice(String buyPrice) {
+    public void setBuyPrice(Float buyPrice) {
         this.buyPrice = buyPrice;
     }
 
