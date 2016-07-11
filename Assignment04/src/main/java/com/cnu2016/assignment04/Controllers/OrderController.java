@@ -59,6 +59,13 @@ public class OrderController {
         for (orderLine item : orderLineList) {
             if(item.getId().getOrder().getOrderId().equals(id)){
                 totalSum += item.getPrice()*item.getQuantity();
+                product tempProduct = item.getId().getProduct();
+                Integer quantityInStock = tempProduct.getQuantityInStock();
+                Integer quantityAsked = item.getQuantity();
+                if(quantityInStock - quantityAsked < 0)
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+                tempProduct.setQuantityInStock(quantityInStock - quantityAsked);
+                tempProduct = productRepository.save(tempProduct);
             }
         }
         order tempOrder = orderRepository.findOne(id);

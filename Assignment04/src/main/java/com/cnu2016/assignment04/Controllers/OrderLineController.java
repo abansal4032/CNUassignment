@@ -38,7 +38,6 @@ public class OrderLineController {
         Integer remainingQuantity = tempProduct.getQuantityInStock() - quantity;
         if(remainingQuantity < 0)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        tempProduct.setQuantityInStock(remainingQuantity);
         Float price = tempProduct.getBuyPrice();
         orderLine tempOrderLine = new orderLine();
         orderLineId tempOrderLineId = new orderLineId();
