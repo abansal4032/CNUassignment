@@ -9,9 +9,20 @@ import com.cnu2016.assignment04.AddProduct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class OrderLineController {
+public class OrderLineController extends HandlerInterceptorAdapter {
+
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler)
+            throws Exception {
+        System.out.println("Executed");
+        return true;
+    }
 
     @Autowired
     private OrderLineRepository orderLineRepository;

@@ -8,12 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.cnu2016.assignment04.CheckOut;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class OrderController {
+public class OrderController extends HandlerInterceptorAdapter {
+
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler)
+            throws Exception {
+        System.out.println("Executed");
+        return true;
+    }
 
     @Autowired
     private OrderRepository orderRepository;
