@@ -24,11 +24,23 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
     private AWSQueueService awsQueueService;
 
     @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler) {
+        long time = System.currentTimeMillis();
+        request.setAttribute("Timestamp",time);
+        return true;
+    }
+
+    @Override
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         Map<String, String> queueMessage = new HashMap<String, String>();
         Date date = new Date();
+        long time = System.currentTimeMillis();
+        long requestTime = (long)request.getAttribute("Timestamp");
+        long responseTime = time - requestTime;
+        queueMessage.put("Time to respond",responseTime + "");
         queueMessage.put("Timestamp",date.toString());
         String url = request.getRequestURI();
         queueMessage.put("Url",url);
