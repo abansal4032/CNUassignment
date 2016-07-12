@@ -5,6 +5,7 @@ import javax.persistence.criteria.Fetch;
 import java.util.*;
 import com.cnu2016.assignment04.Models.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity(name = "Orders")
@@ -13,6 +14,7 @@ public class order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("id")
     private Integer orderId;
     private Date orderDate;
 
