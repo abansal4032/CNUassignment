@@ -128,8 +128,8 @@ public class OrderController {
             response.put("details","Not Found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } else {
-            //orderTemp.setEnabled(0);
-            orderRepository.save(orderTemp);
+            orderTemp.setEnabled(0);
+            orderTemp = orderRepository.save(orderTemp);
             return ResponseEntity.status(HttpStatus.OK).body(orderTemp);
         }
     }
