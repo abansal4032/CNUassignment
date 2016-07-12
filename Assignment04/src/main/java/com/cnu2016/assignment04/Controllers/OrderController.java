@@ -79,6 +79,8 @@ public class OrderController {
     /* Checkout and Complete Order */
     @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.PATCH)
     public ResponseEntity placeOrder(@RequestBody CheckOut checkOut, @PathVariable("id") Integer id) {
+        if(checkOut == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         if(checkOut.getUserName() == null || checkOut.getAddress() == null || checkOut.getStatus() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         user tempUser = userRepository.findUniqueByCustomerName(checkOut.getUserName());
