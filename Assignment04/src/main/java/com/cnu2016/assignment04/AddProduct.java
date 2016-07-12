@@ -6,6 +6,7 @@ public class AddProduct {
 
     @JsonProperty("product_id")
     private Integer productId;
+    @JsonProperty("qty")
     private Integer quantity;
 
     public Integer getProductId() {
