@@ -59,7 +59,7 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         tempOrderLine.setPrice(price);
         tempOrderLine.setQuantity(quantity);
         orderLineRepository.save(tempOrderLine);
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 
 
