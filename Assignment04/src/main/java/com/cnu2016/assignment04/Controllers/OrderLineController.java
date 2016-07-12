@@ -34,7 +34,7 @@ public class OrderLineController extends HandlerInterceptorAdapter {
     private OrderRepository orderRepository;
 
     /* Add Product */
-    @RequestMapping(value = "/api/order/{id}/orderLineItem", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity productAddPost(@RequestBody AddProduct addProduct, @PathVariable("id") Integer id) {
         if(id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
@@ -43,7 +43,8 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         product tempProduct = productRepository.findByIdAndEnabled(productId, 1);
         if(tempProduct == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        order tempOrder = orderRepository.findOne(id);
+        //order tempOrder = orderRepository.findOne(id);//ByIdAndEnabled(id, 1);
+        order tempOrder = orderRepository.findByOrderIdAndEnabled(id, 1);
         if(tempOrder == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Integer remainingQuantity = tempProduct.getQuantityInStock() - quantity;
@@ -60,5 +61,7 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         orderLineRepository.save(tempOrderLine);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
+
+
 
 }

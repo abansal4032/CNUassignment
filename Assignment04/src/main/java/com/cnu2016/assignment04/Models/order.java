@@ -14,10 +14,10 @@ public class order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderId;
-
     private Date orderDate;
 
     private String status;
+    private Integer enabled;
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JsonIgnore
@@ -25,11 +25,18 @@ public class order {
     private user user;
 
     public order(){
+        this.enabled = 1;
         this.status = "In Process";
         this.orderDate = new Date();
     }
 
+    public Integer getEnabled() {
+        return enabled;
+    }
 
+    public void setEnabled(Integer enabled) {
+        this.enabled = enabled;
+    }
 
     public Integer getOrderId() {
         return orderId;

@@ -16,14 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class OrderController extends HandlerInterceptorAdapter {
-
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler)
-            throws Exception {
-        System.out.println("Executed");
-        return true;
-    }
+public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -42,8 +35,39 @@ public class OrderController extends HandlerInterceptorAdapter {
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
+    @RequestMapping(value = "/api/orders", method = RequestMethod.GET)
+    public ResponseEntity orderAllGet() {
+        //Iterable<order> result =  orderRepository.findAll();//findByEnabled(1);
+        Iterable<order> result =  orderRepository.findByEnabled(1);
+        if(result != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("details","Not Found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.GET)
+    public ResponseEntity orderOneGet(@PathVariable("id") Integer id) {
+        if(id == null){
+            Map<String, String> response = new HashMap<String, String>();
+            response.put("details","Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        //order result =   orderRepository.findOne(id);//findByIdAndEnabled(id,1);
+        order result =   orderRepository.findByOrderIdAndEnabled(id,1);
+        if(result != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("details","Not Found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
+    }
+
+
     /* Create Order */
-    @RequestMapping(value = "/api/order", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/orders", method = RequestMethod.POST)
     public ResponseEntity orderCreatePost() {
         order newOrder = new order();
         newOrder = orderRepository.save(newOrder);
@@ -53,7 +77,7 @@ public class OrderController extends HandlerInterceptorAdapter {
     }
 
     /* Checkout and Complete Order */
-    @RequestMapping(value = "/api/order/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.PATCH)
     public ResponseEntity placeOrder(@RequestBody CheckOut checkOut, @PathVariable("id") Integer id) {
         user tempUser = userRepository.findUniqueByCustomerName(checkOut.getUserName());
         if(id == null)
@@ -78,7 +102,8 @@ public class OrderController extends HandlerInterceptorAdapter {
                 tempProduct = productRepository.save(tempProduct);
             }
         }
-        order tempOrder = orderRepository.findOne(id);
+       // order tempOrder = orderRepository.findOne(id);//ByIdAndEnabled(id, 1);
+        order tempOrder = orderRepository.findByOrderIdAndEnabled(id, 1);
         tempOrder.setUser(tempUser);
         tempOrder.setStatus("CheckOut");
         tempOrder = orderRepository.save(tempOrder);
@@ -86,6 +111,27 @@ public class OrderController extends HandlerInterceptorAdapter {
         response.put("status","Placed");
         response.put("totalAmount", totalSum.toString());
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity orderDelete(@PathVariable("id") Integer id) {
+        if(id == null) {
+            Map<String, String> response = new HashMap<String, String>();
+            response.put("details","Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        //order orderTemp =   orderRepository.findOne(id);//ByIdAndEnabled(id,1);
+        order orderTemp =   orderRepository.findByOrderIdAndEnabled(id,1);
+        if (orderTemp == null) {
+            Map<String, String> response = new HashMap<String, String>();
+            response.put("details","Not Found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } else {
+            //orderTemp.setEnabled(0);
+            orderRepository.save(orderTemp);
+            return ResponseEntity.status(HttpStatus.OK).body(orderTemp);
+        }
     }
 
 }

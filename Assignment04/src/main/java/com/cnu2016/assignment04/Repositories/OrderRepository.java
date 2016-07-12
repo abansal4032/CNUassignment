@@ -6,5 +6,6 @@ import com.cnu2016.assignment04.Models.order;
 
 
 public interface OrderRepository extends CrudRepository<order, Integer> {
-
+    order findByOrderIdAndEnabled(Integer orderId, Integer Enabled);
+    Iterable<order> findByEnabled(Integer Enabled);
 }
