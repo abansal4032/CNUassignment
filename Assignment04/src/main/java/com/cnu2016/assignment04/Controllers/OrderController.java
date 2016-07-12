@@ -98,7 +98,7 @@ public class OrderController {
                 product tempProduct = item.getId().getProduct();
                 Integer quantityInStock = tempProduct.getQuantityInStock();
                 Integer quantityAsked = item.getQuantity();
-                if(quantityInStock - quantityAsked < 0)
+                if(quantityInStock == null || quantityAsked == null || quantityInStock - quantityAsked < 0)
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
                 tempProduct.setQuantityInStock(quantityInStock - quantityAsked);
                 tempProduct = productRepository.save(tempProduct);
