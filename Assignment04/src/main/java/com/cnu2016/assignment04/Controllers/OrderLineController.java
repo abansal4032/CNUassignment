@@ -36,7 +36,7 @@ public class OrderLineController extends HandlerInterceptorAdapter {
     /* Add Product */
     @RequestMapping(value = "/api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity productAddPost(@RequestBody AddProduct addProduct, @PathVariable("id") Integer id) {
-        if(id == null)
+        if(id == null || addProduct == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Integer productId = addProduct.getProductId();
         Integer quantity = addProduct.getQuantity();
