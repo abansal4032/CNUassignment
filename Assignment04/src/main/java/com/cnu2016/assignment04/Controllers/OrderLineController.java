@@ -48,8 +48,8 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         if(tempOrder == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Integer remainingQuantity = tempProduct.getQuantityInStock() - quantity;
-        if(remainingQuantity < 0)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        //if(remainingQuantity < 0)
+        //    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Float price = tempProduct.getBuyPrice();
         orderLine tempOrderLine = new orderLine();
         orderLineId tempOrderLineId = new orderLineId();
