@@ -73,7 +73,7 @@ public class OrderController {
         newOrder = orderRepository.save(newOrder);
         Map<String, Integer> response = new HashMap<String, Integer>();
         response.put("orderId",newOrder.getOrderId());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /* Checkout and Complete Order */
