@@ -134,7 +134,7 @@ public class OrderController {
         Map<String, String> response = new HashMap<String, String>();
         response.put("status","Placed");
         response.put("totalAmount", totalSum.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(tempOrder);
     }
 
 
