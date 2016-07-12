@@ -41,7 +41,7 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         Integer productId = addProduct.getProductId();
         Integer quantity = addProduct.getQuantity();
         product tempProduct = productRepository.findByIdAndEnabled(productId, 1);
-        if(tempProduct == null)
+        if(quantity == null || tempProduct == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         //order tempOrder = orderRepository.findOne(id);//ByIdAndEnabled(id, 1);
         order tempOrder = orderRepository.findByOrderIdAndEnabled(id, 1);
