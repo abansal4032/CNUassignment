@@ -65,8 +65,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             temp += temp2;
         }
 
-       // String tempJson = new ObjectMapper().writeValueAsString(parameters);
-       // queueMessage.put("Parameters", tempJson);
+        // String tempJson = new ObjectMapper().writeValueAsString(parameters);
+        // queueMessage.put("Parameters", tempJson);
         queueMessage.put("Parameters", temp);
         Integer responseCode = response.getStatus();
         queueMessage.put("Response Code",responseCode.toString());
