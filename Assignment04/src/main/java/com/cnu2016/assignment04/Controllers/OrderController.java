@@ -94,6 +94,18 @@ public class OrderController {
         }
         Iterable<orderLine> orderLineList = orderLineRepository.findAll();
         Float totalSum = new Float(0);
+        for(orderLine item : orderLineList) {
+            if(item.getId().getOrder().getOrderId().equals(id)) {
+                product tempProduct = item.getId().getProduct();
+                Integer tempProductAvailable = item.getId().getProduct().getQuantityInStock();
+                if(tempProductAvailable == null || tempProductAvailable <= 0 )
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+                Integer quantityInStock = tempProduct.getQuantityInStock();
+                Integer quantityAsked = item.getQuantity();
+                if(quantityInStock == null || quantityAsked == null || quantityInStock - quantityAsked < 0)
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+            }
+        }
         for (orderLine item : orderLineList) {
             if(item.getId().getOrder().getOrderId().equals(id)){
                 totalSum += item.getPrice()*item.getQuantity();
@@ -109,7 +121,6 @@ public class OrderController {
                 tempProduct = productRepository.save(tempProduct);
             }
         }
-       // order tempOrder = orderRepository.findOne(id);//ByIdAndEnabled(id, 1);
         order tempOrder = orderRepository.findByOrderIdAndEnabled(id, 1);
         if(tempOrder == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
