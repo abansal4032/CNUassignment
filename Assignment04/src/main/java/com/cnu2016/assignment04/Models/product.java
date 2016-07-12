@@ -1,5 +1,7 @@
 package com.cnu2016.assignment04.Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -17,6 +19,7 @@ public class product {
     private String description;
     private String productName;
     private Float buyPrice;
+    @JsonProperty("qty")
     private Integer quantityInStock;
     private Integer categoryId;
     private Integer enabled;
