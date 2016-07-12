@@ -112,7 +112,7 @@ public class OrderController {
         }
         for (orderLine item : orderLineList) {
             if(item.getId().getOrder().getOrderId().equals(id)){
-                totalSum += item.getPrice()*item.getQuantity();
+                //totalSum += item.getPrice()*item.getQuantity();
                 product tempProduct = item.getId().getProduct();
                 Integer tempProductAvailable = item.getId().getProduct().getQuantityInStock();
                 if(tempProductAvailable == null || tempProductAvailable <= 0 )
