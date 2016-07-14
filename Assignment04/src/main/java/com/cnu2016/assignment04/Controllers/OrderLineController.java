@@ -15,14 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class OrderLineController extends HandlerInterceptorAdapter {
-
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler)
-            throws Exception {
-        System.out.println("Executed");
-        return true;
-    }
+public class OrderLineController {
 
     @Autowired
     private OrderLineRepository orderLineRepository;
@@ -48,8 +41,6 @@ public class OrderLineController extends HandlerInterceptorAdapter {
         if(tempOrder == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Integer remainingQuantity = tempProduct.getQuantityInStock() - quantity;
-        //if(remainingQuantity < 0)
-        //    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         Float price = tempProduct.getBuyPrice();
         orderLine tempOrderLine = new orderLine();
         orderLineId tempOrderLineId = new orderLineId();

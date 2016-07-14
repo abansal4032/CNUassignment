@@ -14,14 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class ProductController extends HandlerInterceptorAdapter {
-
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler)
-            throws Exception {
-        System.out.println("Executed");
-        return true;
-    }
+public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
@@ -29,21 +22,11 @@ public class ProductController extends HandlerInterceptorAdapter {
     @RequestMapping(value = "/api/products", method = RequestMethod.GET)
     public ResponseEntity productAllGet() {
         Iterable<product> result =  productRepository.findByEnabled(1);
-        if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        }
-        Map<String, String> response = new HashMap<String, String>();
-        response.put("details","Not Found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @RequestMapping(value = "/api/products/{id}", method = RequestMethod.GET)
     public ResponseEntity productOneGet(@PathVariable("id") Integer id) {
-        if(id == null){
-            Map<String, String> response = new HashMap<String, String>();
-            response.put("details","Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
         product result =   productRepository.findByIdAndEnabled(id,1);
         if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -67,7 +50,7 @@ public class ProductController extends HandlerInterceptorAdapter {
 
     @RequestMapping(value = "/api/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity productAddPut(@RequestBody product Product, @PathVariable("id") Integer id) {
-        if(id == null || Product.getCode() == null) {
+        if(Product.getCode() == null) {
             Map<String, String> response = new HashMap<String, String>();
             response.put("details","Not Found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -87,11 +70,6 @@ public class ProductController extends HandlerInterceptorAdapter {
 
     @RequestMapping(value = "/api/products/{id}", method = RequestMethod.PATCH)
     public ResponseEntity productAddPatch(@RequestBody product Product, @PathVariable("id") Integer id) {
-        if(id == null) {
-            Map<String, String> response = new HashMap<String, String>();
-            response.put("details","Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
         product productTemp =   productRepository.findByIdAndEnabled(id,1);
         if (productTemp == null) {
             Map<String, String> response = new HashMap<String, String>();
@@ -107,11 +85,6 @@ public class ProductController extends HandlerInterceptorAdapter {
 
     @RequestMapping(value = "/api/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity productDelete(@PathVariable("id") Integer id) {
-        if(id == null) {
-            Map<String, String> response = new HashMap<String, String>();
-            response.put("details","Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
         product productTemp =   productRepository.findByIdAndEnabled(id,1);
         if (productTemp == null) {
             Map<String, String> response = new HashMap<String, String>();

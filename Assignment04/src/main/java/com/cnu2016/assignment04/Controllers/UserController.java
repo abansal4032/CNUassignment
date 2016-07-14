@@ -14,22 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class UserController extends HandlerInterceptorAdapter {
-
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler)
-            throws Exception {
-        System.out.println("Executed");
-        return true;
-    }
+public class UserController{
 
     @Autowired
     private UserRepository userRepository;
 
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public Iterable<user> userAllGet() {
-        return userRepository.findAll();
+    @RequestMapping(value = "/api/users", method = RequestMethod.GET)
+    public ResponseEntity userAllGet() {
+        Iterable<user> users = userRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 
