@@ -18,10 +18,6 @@ def sales(request):
     startDate = datetime.datetime.strptime(startDate,'%m/%d/%Y').strftime('%Y-%m-%d')
     endDate = request.GET.get('endDate', '01/31/2050')
     endDate = datetime.datetime.strptime(endDate, '%m/%d/%Y').strftime('%Y-%m-%d')
-    print startDate
-    print endDate
-    orders = Orders.objects.filter(Q(orderdate__gte=startDate) & Q(orderdate__lte=endDate)).aggregate(Count('orderdate'))
-    print orders
     query2 = Bridge2.objects.filter(orderid__orderdate__gte=startDate, orderid__orderdate__lte=endDate).values('orderid__orderdate').annotate(orders=ExpressionWrapper(Count('orderid__orderid'),output_field=FloatField()), qty=ExpressionWrapper(Sum('quantity'),output_field=FloatField()), sale_price=ExpressionWrapper(Sum(F('price') * F('quantity')),output_field=FloatField()), buy_price=ExpressionWrapper(Sum(F('quantity') * F('productid__buyprice')),output_field=FloatField()), profit=ExpressionWrapper(Sum((F('price') - F('productid__buyprice'))*F('quantity')),output_field=FloatField())).order_by('-orderid__orderdate')
     dlist2 = []
     for x in query2:
