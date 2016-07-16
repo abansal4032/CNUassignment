@@ -15,14 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class OrderLineController extends HandlerInterceptorAdapter {
-
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler)
-            throws Exception {
-        System.out.println("Executed");
-        return true;
-    }
+public class OrderLineController {
 
     @Autowired
     private OrderLineRepository orderLineRepository;
