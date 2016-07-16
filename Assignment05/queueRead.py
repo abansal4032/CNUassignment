@@ -2,21 +2,33 @@
 import boto.sqs
 import json
 import pymysql
-conn = pymysql.connect(host='aline-cnu-insights-dev.czuocyoc6awe.us-east-1.rds.amazonaws.com', unix_socket='/tmp/mysql.sock', user='abansal', passwd='abansal', db='cnu2016_abansal')
-cur = conn.cursor()
-conn2 = boto.sqs.connect_to_region("us-east-1")
-queue = conn2.get_queue('archit_bansal_queue')
-while 1 :
-    rs = queue.get_messages()
-    print len(rs)
-    if len(rs) > 0 :
-        m = rs[0].get_body()
-        x = m
-        x = json.loads(x)
-        z =  [x["Parameters"].encode('utf-8'),x["IpAddress"], x["Time to respond"], x["Timestamp"],x["Url"], x["Response Code"]]
-        z = (', '.join('\'' + item + '\'' for item in z))
-        qry = "INSERT INTO Parameters2(`Parameters`,`IpAddress`,`Time to respond`,`Timestamp`,`Url`,`Response Code`) VALUES (" + z + ");"
-        cur.execute(qry)
-        conn.commit()
+import threading
 
+POLLING_INTERVAL = 5.0
+
+def logQueue():
+    threading.Timer(POLLING_INTERVAL, logQueue).start()
+    f = open("databaseDetails.txt")
+    hostname = f.readline()
+    username = f.readline()
+    password = f.readline()
+    database = f.readline()
+    queuename = f.readline()
+    conn = pymysql.connect(host=hostname, unix_socket='/tmp/mysql.sock', user=username , passwd=password, db=database)
+    cur = conn.cursor()
+    conn2 = boto.sqs.connect_to_region("us-east-1")
+    queue = conn2.get_queue(queuename)
+    while 1 :
+        rs = queue.get_messages()
+        if len(rs) > 0 :
+            message = rs[0].get_body()
+            instance = message
+            instance = json.loads(instance)
+            queryParams =  [instance["Parameters"].encode('utf-8'),instance["IpAddress"], instance["Time to respond"], instance["Timestamp"],instance["Url"], instance["Response Code"]]
+            queryParams = (', '.join('\'' + item + '\'' for item in queryParams))
+            qry = "INSERT INTO Parameters2(`Parameters`,`IpAddress`,`Time to respond`,`Timestamp`,`Url`,`Response Code`) VALUES (" + queryParams + ");"
+            cur.execute(qry)
+            conn.commit()
+
+logQueue()
 
