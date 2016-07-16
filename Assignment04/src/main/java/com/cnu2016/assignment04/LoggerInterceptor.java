@@ -1,5 +1,7 @@
 package com.cnu2016.assignment04;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +13,9 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+
 
 
 @Component
@@ -46,17 +51,26 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         queueMessage.put("Url",url);
         Map<String, String> parameters = new HashMap<String, String>();
         Enumeration headerNames = request.getHeaderNames();
+        String temp = "";
         while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
+            //String temp4 = (String) headerNames.nextElement();
+            //String temp5 = request.getHeader(temp4);
+            //parameters.put(temp4, temp5);
+            String temp2 = "";
+            String temp3 = (String) headerNames.nextElement();
+            temp2 += temp3 + ":";
+            String key = temp3;
+            temp2 += request.getHeader(key) + ",";
             String value = request.getHeader(key);
-            parameters.put(key, value);
+            temp += temp2;
         }
-        queueMessage.put("Parameters", parameters.toString());
+        queueMessage.put("Parameters", temp);
         Integer responseCode = response.getStatus();
         queueMessage.put("Response Code",responseCode.toString());
         String ipAddress = request.getRemoteAddr();
         queueMessage.put("IpAddress",ipAddress);
-        awsQueueService.sendMessage(queueMessage.toString());
+        String json = new ObjectMapper().writeValueAsString(queueMessage);
+        awsQueueService.sendMessage(json);
 
     }
 }
