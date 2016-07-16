@@ -37,7 +37,6 @@ public class OrderController {
 
     @RequestMapping(value = "/api/orders", method = RequestMethod.GET)
     public ResponseEntity orderAllGet() {
-        //Iterable<order> result =  orderRepository.findAll();//findByEnabled(1);
         Iterable<order> result =  orderRepository.findByEnabled(1);
         if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -54,7 +53,6 @@ public class OrderController {
             response.put("details","Not Found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        //order result =   orderRepository.findOne(id);//findByIdAndEnabled(id,1);
         order result =   orderRepository.findByOrderIdAndEnabled(id,1);
         if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -83,19 +81,12 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         if(checkOut.getUserName() == null || checkOut.getAddress() == null || checkOut.getStatus() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        //user tempUser = userRepository.findUniqueByCustomerName(checkOut.getUserName());
         user tempUser = new user();
         tempUser.setCustomerName(checkOut.getUserName());
         tempUser.setAddressLine1(checkOut.getAddress());
         tempUser = userRepository.save(tempUser);
         if(id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        /*if (tempUser == null) {
-            tempUser = new user();
-            tempUser.setCustomerName(checkOut.getUserName());
-            tempUser.setAddressLine1(checkOut.getAddress());
-            tempUser = userRepository.save(tempUser);
-        }*/
         Iterable<orderLine> orderLineList = orderLineRepository.findAll();
         Float totalSum = new Float(0);
         for(orderLine item : orderLineList) {
@@ -145,7 +136,6 @@ public class OrderController {
             response.put("details","Not Found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        //order orderTemp =   orderRepository.findOne(id);//ByIdAndEnabled(id,1);
         order orderTemp =   orderRepository.findByOrderIdAndEnabled(id,1);
         if (orderTemp == null) {
             Map<String, String> response = new HashMap<String, String>();
