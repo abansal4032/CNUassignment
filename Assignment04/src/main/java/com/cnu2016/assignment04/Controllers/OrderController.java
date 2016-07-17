@@ -30,29 +30,32 @@ public class OrderController {
     @Autowired
     private OrderLineRepository orderLineRepository;
 
+    /**
+     * Performs health check for the server
+     */
+
     @RequestMapping(value = "/api/health", method = RequestMethod.GET)
     public ResponseEntity healthCheck() {
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
+    /**
+     * Returs the details of all the orders placed
+     * @return The json containing all the order details of all the orders
+     */
     @RequestMapping(value = "/api/orders", method = RequestMethod.GET)
     public ResponseEntity orderAllGet() {
         Iterable<order> result =  orderRepository.findByEnabled(1);
-        if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        }
-        Map<String, String> response = new HashMap<String, String>();
-        response.put("details","Not Found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    /**
+     * Returs the details of a specific order placed
+     * @param id The orderid of the order asked for
+     * @return The json containing the order details the order if present else a NOT_FOUND
+     */
     @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.GET)
     public ResponseEntity orderOneGet(@PathVariable("id") Integer id) {
-        if(id == null){
-            Map<String, String> response = new HashMap<String, String>();
-            response.put("details","Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
         order result =   orderRepository.findByOrderIdAndEnabled(id,1);
         if(result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -64,6 +67,10 @@ public class OrderController {
     }
 
 
+    /**
+     * Creates a new order
+     * @return The orderid of the newly created order
+     */
     /* Create Order */
     @RequestMapping(value = "/api/orders", method = RequestMethod.POST)
     public ResponseEntity orderCreatePost() {
@@ -73,6 +80,12 @@ public class OrderController {
         response.put("id",newOrder.getOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    /** Checkout the order after adding products to it
+     * @param id The orderid to checkout
+     * @param checkOut the username and address of the user placing the order
+     * @return The details of the order placed if OK else a blank body
+     */
 
     /* Checkout and Complete Order */
     @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.PATCH)
@@ -103,7 +116,6 @@ public class OrderController {
         }
         for (orderLine item : orderLineList) {
             if(item.getId().getOrder().getOrderId().equals(id)){
-                //totalSum += item.getPrice()*item.getQuantity();
                 product tempProduct = item.getId().getProduct();
                 Integer tempProductAvailable = item.getId().getProduct().getQuantityInStock();
                 if(tempProductAvailable == null || tempProductAvailable <= 0 )
@@ -128,14 +140,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(tempOrder);
     }
 
+    /**
+     * Delete a placed order
+     * @param id The id of the placed order
+     * @return The detials of the object placed or NOT_FOUND if already deleted
+     */
 
     @RequestMapping(value = "/api/orders/{id}", method = RequestMethod.DELETE)
     public ResponseEntity orderDelete(@PathVariable("id") Integer id) {
-        if(id == null) {
-            Map<String, String> response = new HashMap<String, String>();
-            response.put("details","Not Found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
         order orderTemp =   orderRepository.findByOrderIdAndEnabled(id,1);
         if (orderTemp == null) {
             Map<String, String> response = new HashMap<String, String>();

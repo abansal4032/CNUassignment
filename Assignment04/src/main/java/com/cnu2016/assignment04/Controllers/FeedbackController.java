@@ -18,6 +18,12 @@ public class FeedbackController{
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    /**
+     * Gets the feedback from the user
+     * @param feedBack The Feedback message
+     * @return Blank body
+     */
+
     @RequestMapping(value = "/api/contactus", method = RequestMethod.POST)
     public ResponseEntity contactUs(@RequestBody feedback feedBack) {
         feedbackRepository.save(feedBack);

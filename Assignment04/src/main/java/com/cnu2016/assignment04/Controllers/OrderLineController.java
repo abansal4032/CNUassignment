@@ -26,6 +26,12 @@ public class OrderLineController {
     @Autowired
     private OrderRepository orderRepository;
 
+    /**
+     * Adds product to a given order
+     * @param addProduct The details of the product to be added
+     * @param id The id of the order to which the product has to be added
+     * @return CREATED on successful addition else a BAD_REQUEST
+     */
     /* Add Product */
     @RequestMapping(value = "/api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity productAddPost(@RequestBody AddProduct addProduct, @PathVariable("id") Integer id) {

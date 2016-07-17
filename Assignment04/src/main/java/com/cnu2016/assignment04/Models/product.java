@@ -93,10 +93,6 @@ public class product {
         return code;
     }
 
-    public void setDode(String productCode) {
-        this.code = productCode;
-    }
-
     public void update(product Product) {
         if(!(Product.getId() == null)) {
             this.id = Product.getId();

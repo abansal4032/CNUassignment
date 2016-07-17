@@ -36,8 +36,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) {
         long time = System.currentTimeMillis();
-        logger.info(request.getMethod() + " " + request.getRequestURL().toString() + " called ");
         request.setAttribute("Timestamp",time);
+        logger.info(request.getMethod() + " " + request.getRequestURL().toString() + " called ");
         return true;
     }
 
@@ -46,6 +46,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         Map<String, String> queueMessage = new HashMap<String, String>();
+        logger.info(request.getMethod() + " " + request.getRequestURL().toString() + " executed with status " + response.getStatus());
         Date date = new Date();
         long time = System.currentTimeMillis();
         long requestTime = (long)request.getAttribute("Timestamp");
@@ -66,6 +67,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             String value = request.getHeader(key);
             temp += temp2;
         }
+
         queueMessage.put("Parameters", temp);
         Integer responseCode = response.getStatus();
         queueMessage.put("Response Code",responseCode.toString());
@@ -73,7 +75,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         queueMessage.put("IpAddress",ipAddress);
         String json = new ObjectMapper().writeValueAsString(queueMessage);
         awsQueueService.sendMessage(json);
-        logger.info(request.getMethod() + " " + request.getRequestURL().toString() + " executed with status " + response.getStatus());
 
     }
 }
