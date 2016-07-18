@@ -42,23 +42,28 @@ class Orders(models.Model):
     orderid = models.AutoField(db_column='orderId', primary_key=True)  # Field name made lowercase.
     orderdate = models.DateField(db_column='orderDate')  # Field name made lowercase.
     status = models.CharField(max_length=255, blank=True, null=True)
-    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userId', blank=True, null=True)  # Field name made lowercase.
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userId', related_name='user_details', blank=True, null=True)  # Field name made lowercase.
     enabled = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'Orders'
 
+    # def __unicode__(self):
+    #     return unicode(self.status)
+    # def __unicode__(self):
+    #     return unicode(self.orderid, self.orderdate, self.status, self.userid, self.enabled);
+
 
 class Products(models.Model):
     productid = models.AutoField(db_column='productId', primary_key=True)  # Field name made lowercase.
-    productcode = models.CharField(db_column='productCode', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    productcode = models.CharField(db_column='productCode', max_length=255)  # Field name made lowercase.
     productname = models.CharField(db_column='productName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    productdescription = models.TextField(db_column='productDescription', blank=True, null=True)  # Field name made lowercase.
+    productdescription = models.TextField(db_column='productDescription')  # Field name made lowercase.
     buyprice = models.DecimalField(db_column='buyPrice', max_digits=10, decimal_places=2)  # Field name made lowercase.
-    quantityinstock = models.IntegerField(db_column='quantityInStock')  # Field name made lowercase.
+    quantityinstock = models.IntegerField(db_column='quantityInStock', blank=True, null=True)  # Field name made lowercase.
     categoryid = models.ForeignKey(Category, models.DO_NOTHING, db_column='categoryId', blank=True, null=True)  # Field name made lowercase.
-    enabled = models.IntegerField(blank=True, null=True)
+    enabled = models.IntegerField(blank=True, default = 1)
 
     class Meta:
         managed = False
@@ -90,6 +95,7 @@ class Bridge2(models.Model):
         db_table = 'Bridge2'
 
 
+
 class Parameters2(models.Model):
     parameters = models.TextField(db_column='Parameters', blank=True, null=True)  # Field name made lowercase.
     ipaddress = models.TextField(db_column='IpAddress', blank=True, null=True)  # Field name made lowercase.
@@ -116,21 +122,6 @@ class Audit(models.Model):
     class Meta:
         managed = False
         db_table = 'audit'
-
-
-# class AuditLogs(models.Model):
-#     id = models.IntegerField(blank=True, null=True)
-#     parameters = models.TextField(db_column='Parameters', blank=True, null=True)  # Field name made lowercase.
-#     ipaddress = models.CharField(db_column='IpAddress', max_length=255, blank=True, null=True)  # Field name made lowercase.
-#     time_to_respond = models.IntegerField(db_column='Time to respond', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-#     timestamp = models.CharField(db_column='Timestamp', max_length=255, blank=True, null=True)  # Field name made lowercase.
-#     url = models.CharField(db_column='Url', max_length=255, blank=True, null=True)  # Field name made lowercase.
-#     response_code = models.IntegerField(db_column='Response Code', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'audit_Logs'
-#
 
 class AuditLog(models.Model):
     accept_language = models.TextField(db_column='accept-language', blank=True, null=True)  # Field renamed to remove unsuitable characters.

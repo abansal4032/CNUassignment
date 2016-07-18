@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from product import views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/reports/daily-sale$', views.sales, name='sales'),
-    url(r'^product/', include('product.urls')),
+    url(r'^api/', include('product.urls')),
+    url(r'^docs/', include('rest_framework_swagger.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
