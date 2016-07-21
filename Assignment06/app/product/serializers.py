@@ -2,16 +2,28 @@ from rest_framework import serializers
 from models import *
 import datetime
 
+class LogMiddleware( object ):
+
+    def process_response( self, request, response ):
+        response._container = ['{"data":' + response._container[0] + '}']
+        return response
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+
+
 class OrderLineItemSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only = True)
     product_id = serializers.IntegerField(source = 'productid.productid')
     order_id = serializers.IntegerField(source = 'orderid.orderid', read_only = True)
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    qty = serializers.IntegerField(source = 'quantity')
 
     class Meta:
         model = Bridge2
-        fields = ('id', 'product_id', 'order_id', 'price')
+        fields = ('id', 'product_id', 'order_id', 'price', 'qty')
 
 class ProductSerializer(serializers.ModelSerializer):
 
@@ -22,6 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(source='categoryid.categoryid',read_only=True)
     category = serializers.CharField(source='categoryid.categorydescription',write_only=True,max_length = 255)
     enabled = serializers.IntegerField(read_only = True)
+    quantity = serializers.IntegerField(source='quantityinstock')
 
     def create(self, validated_data):
         category = Category.objects.get_or_create(
@@ -33,6 +46,7 @@ class ProductSerializer(serializers.ModelSerializer):
             productdescription = validated_data['productdescription'],
             buyprice = validated_data['buyprice'],
             categoryid = category[0],
+            quantityinstock = 0,
             enabled = 1
         )
 
@@ -40,7 +54,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Products
-        fields = ('id', 'code', 'description', 'price', 'category_id', 'category', 'enabled')
+        fields = ('id', 'code', 'description', 'price', 'category_id', 'category', 'enabled', 'quantity')
 
     def update(self, instance, validated_data):
         instance.productcode = validated_data.get('productcode',instance.productcode)
@@ -97,13 +111,15 @@ class OrderSerializer(serializers.ModelSerializer):
             )
             order = Orders.objects.create(
                 orderdate=datetime.datetime.now().date(),
-                status=validated_data['status'],
+                status="Created",
                 userid=user[0],
                 enabled=1
             )
         return order
 
     def partial_update(self, instance, validated_data):
+        print "in patch order"
+        print validated_data
         keyUser = instance.userid.userid
         if 'status' in validated_data.keys():
             instance.status = validated_data['status']

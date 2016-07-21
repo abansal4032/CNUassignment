@@ -4,6 +4,9 @@ from . import views
 from views import *
 
 router = routers.DefaultRouter()
+router.register(r'health', HealthCheck, base_name = 'HealthCheck')
+router.register(r'categoryproduct', CategoryProductViewSet, base_name = 'CategoryProductViewSet')
+router.register(r'categories', CategoryViewSet, base_name = 'CategoryViewSet')
 router.register(r'products/summary', SummaryViewSet, base_name = 'SummaryViewSet')
 router.register(r'orders/summary', OrderSummaryViewSet, base_name = 'OrderSummaryViewSet')
 router.register(r'^products', ProductViewSet, base_name = 'ProductViewSet')

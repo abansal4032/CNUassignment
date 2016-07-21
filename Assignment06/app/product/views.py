@@ -20,6 +20,29 @@ class LogMiddleware( object ):
         response._container = ['{"data":' + response._container[0] + '}']
         return response
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    def get_queryset(self):
+        return Category.objects.all()
+
+class HealthCheck(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    def get_queryset(self):
+        return Category.objects.all()
+    def list(self, request, *args, **kwargs):
+        return HttpResponse(status.HTTP_200_OK)
+
+class CategoryProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+    def get_queryset(self):
+        return Products.objects.filter(enabled=1)
+
+    def retrieve(self, request, *args, **kwargs):
+        categoryId = kwargs["pk"]
+        result = self.get_queryset()
+        result = result.filter(categoryid__categoryid = categoryId)
+        serializer = self.get_serializer(result, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 class SummaryViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
@@ -118,10 +141,25 @@ class OrderViewSet(viewsets.ModelViewSet):
         return HttpResponse(status.HTTP_404_NOT_FOUND)
 
 
-class OrderLineItemSet(mixins.CreateModelMixin,mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):
+class OrderLineItemSet(viewsets.ModelViewSet):
     serializer_class = OrderLineItemSerializer
-    def get_queryset(selfself):
+    def get_queryset(self):
         return OrderLineItemSet.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        print "in update"
+        print args
+        print kwargs
+        print request.data;
+        Bridge2.objects.filter(id=kwargs["pk"]).update(quantity=request.data.get("qty"))
+        return HttpResponse(status.HTTP_404_NOT_FOUND)
+
+    def destroy(self, request, *args, **kwargs):
+        print "in delete"
+        print args;
+        print kwargs;
+        Bridge2.objects.filter(id=kwargs["pk"]).delete();
+        return HttpResponse(status.HTTP_404_NOT_FOUND)
 
     def list(self, request, *args, **kwargs):
         orderLineItem = Bridge2.objects.filter(orderid=kwargs["order_id"])
@@ -134,16 +172,19 @@ class OrderLineItemSet(mixins.CreateModelMixin,mixins.ListModelMixin,mixins.Retr
         return JsonResponse(serializer.data, safe = False)
 
     def create(self, request, *args, **kwargs):
-        product = Products.objects.filter(productid = request.POST.get("product_id"))
+        # print kwargs
+        # print request.data
+        product = Products.objects.filter(productid = request.data.get("product_id"))
+        # print product[0].__dict__;
         order = Orders.objects.filter(orderid = kwargs["order_id"])
         orderLineItem = Bridge2.objects.create(
             productid = product[0],
             orderid = order[0],
-            price = request.POST.get("price"),
+            price = product[0].buyprice,
+            quantity = request.data.get("qty"),
         )
         serializer = self.get_serializer(orderLineItem)
         return JsonResponse(serializer.data, safe = False)
-
 
 
     def get_queryset(self):
