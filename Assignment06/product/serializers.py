@@ -34,7 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(source='categoryid.categoryid',read_only=True)
     category = serializers.CharField(source='categoryid.categorydescription',write_only=True,max_length = 255)
     enabled = serializers.IntegerField(read_only = True)
-    quantity = serializers.IntegerField(source='quantityinstock')
+    quantity = serializers.IntegerField(source='quantityinstock',required=False)
 
     def create(self, validated_data):
         category = Category.objects.get_or_create(
