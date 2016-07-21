@@ -1,0 +1,10 @@
+<div ng-controller="CheckoutController">
+<div class = "text-center col-sm-3"></div>
+<div class = "text-center col-sm-6">
+    Username:<br><input ng-model="username" class="form-control" required="true"><br>
+    Address:<br><input ng-model="address" class="form-control" required="true"><br>
+    Status:<br><input ng-model="status" class="form-control" required="true"><br>
+    <input type="radio" checked> Cash On Delivery <br><br>
+<a type="button" ng-click='checkout()' href="#/" ng-disabled="valid==0" class="btn btn-info">Confirm</a>
+</div>
+</div>

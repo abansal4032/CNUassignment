@@ -13,8 +13,23 @@
                             <a href="#/category/{{y.categoryid}}" class="list-group-item">{{y.categorydescription}}</a>
                         </div>
                     </div>
-                    <div>
+                </div>
             </ul>
+            <div>
+                <div class="panel panel-primary">
+                        <div class="panel-heading"><h5><center>Highlights</center></h5></div>
+                        <div class="panel-body">
+                            <ul>
+                                <li><i class="glyphicon"></i> 24 X 7 Customer Service</li>
+                                <li><i class="glyphicon"></i> Quality products</li>
+                                <li><i class="glyphicon"></i> Cash back gaurantee</li>
+                                <li><i class="glyphicon"></i> Easy returns</li>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
         </div>
 
         <div class="col-sm-9">
@@ -30,15 +45,13 @@
                 <div class="row">
                     <div ng-repeat="x in prod_names">
                         <div class="col-sm-4">
-                            <div class="panel panel-primary">
-                                <a href="#/{{x.id}}" class="thumbnail">
-                                    <div class="panel-heading"><h5><center>{{x.code}}</center></h5></div>
-                                    <div class="panel-body"><img src="images/logo.jpeg" style="width:100%" class="img-responsive" alt="Image"></div>
-                                    <div class="caption">
-                                        <h5><center>Price = {{x.price}}</center></h5>
-                                    </div>
-                                </a>
-                            </div>
+                            <a href="#/{{x.id}}" class="thumbnail">
+                                <div class="panel-heading" style="background-color: #2b669a"><h5 style="color:white"><center>{{x.code}}</center></h5></div>
+                                <div class="panel-body"><img src="images/{{x.id%5 + 1}}.jpg" style="width:200px;height: 200px" class="img-responsive center-block" alt="Image"></div> <!-- {{x.id%5 + 1}} -->
+                                <div class="caption">
+                                    <h5><center>Rs. {{x.price}}</center></h5>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

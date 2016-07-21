@@ -1,15 +1,30 @@
 <div ng-controller="RouteController">
     <div class="row">
         <div class="container">
-            <div ng-repeat="x in categorised">
-                <div class="col-sm-4">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><h5><center>{{x.code}}</center></h5></div>
-                        <div class="panel-body"><img src="images/logo.jpeg" style="width:100%" class="img-responsive" alt="Image"></div>
-                        <div class="caption">
-                            <h5><center>Price = {{x.price}}</center></h5>
+            <div ng-controller="customersCtrl">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <a href="" class="list-group-item active">Categories</a>
+                    </div>
+                    <div ng-repeat="y in cat_names">
+                        <div class="list-group">
+                            <a href="#/category/{{y.categoryid}}" class="list-group-item">{{y.categorydescription}}</a>
                         </div>
-                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div ng-repeat="x in categorised">
+                    <div class="col-sm-4">
+                        <div class="panel panel-primary">
+                            <a href="#/{{x.id}}" class="thumbnail">
+                                <div class="panel-heading"><h5><center>{{x.code}}</center></h5></div>
+                                <div class="panel-body"><img src="images/{{x.id%5 + 1}}.jpg" style="width:200px; height:200px" class="img-responsive center-block" alt="Image"></div>
+                                <div class="caption">
+                                    <h5><center>Price = {{x.price}}</center></h5>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

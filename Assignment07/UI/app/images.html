@@ -1,0 +1,26 @@
+<div ng-controller="RouteController">
+<ul class = "nav nav-tabs" >
+    <!--<li>{{product_name.data.image}}</li> TODO: When image in database -->
+    <li><a href="#">Home</a></li>
+    <li class="active"><a href="#/{{product_name.data.id}}/image">Image</a></li>
+    <li><a href="#/{{product_name.data.id}}/details">Details</a></li>
+</ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel-body"><img src="images/5.jpg" style="width:100%" class="img-responsive" alt="Image"></div>
+            </div>
+        </div>
+        <div class="row">  <!-- TODO: Loop around the available images -->
+            <div class="col-sm-4">
+                <div class="panel-body"><img src="images/1.jpg" style="width:100%" class="img-responsive" alt="Image"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel-body"><img src="images/2.jpg" style="width:100%" class="img-responsive" alt="Image"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel-body"><img src="images/3.jpg" style="width:100%" class="img-responsive" alt="Image"></div>
+            </div>
+        </div>
+    </div>
+</div>

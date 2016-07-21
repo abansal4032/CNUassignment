@@ -1,0 +1,43 @@
+<div class="container">
+    <table id="cart" class="table table-hover table-condensed">
+        <thead>
+        <tr>
+            <th style="width:50%">Product Id</th>
+            <th style="width:10%">Price</th>
+            <th style="width:8%">Quantity</th>
+            <th style="width:22%" class="text-center">Subtotal</th>
+            <th style="width:10%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="x in cartdetails">
+                <td data-th="Product Id">
+                    <div class="row">
+                        <div class="col-sm-2 hidden-xs"><img src="images/logo.jpg" alt="..." class="img-responsive"/></div>
+                        <div class="col-sm-2">
+                         {{x.product_id}}
+                        </div>
+                    </div>
+                </td>
+                <td data-th="Price">{{x.price}}</td>
+                <td data-th="Quantity">
+                    <input type="number" ng-model=x.qty class="form-control text-center">
+                </td>
+                <td data-th="Subtotal" class="text-center" ng-init="ptotal=x.price*x.qty;ttotal=ttotal+ptotal;">{{x.price*x.qty}}</td>
+                <td class="btn-default text-center btn" ng-click="deletep(x)" href="#/cart"><b>X</b></td>
+                <td class="btn-default text-center btn" ng-click="updatep(x,x.qty)"><b>Update</b></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr class="visible-xs">
+            <td class="text-center"><strong>Total 1.99</strong></td>
+        </tr>
+        <tr>
+            <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+            <td colspan="2" class="hidden-xs"></td>
+            <td class="hidden-xs text-center" id="total" >{{total}}</td>
+            <td><a href="#/checkout" class="btn btn-success btn-block" ng-click='check(cartdetails)' ng-disabled="valid==0">Checkout <i class="fa fa-angle-right"></i></a></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
