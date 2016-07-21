@@ -30,7 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only = True, source='productid')
     code = serializers.CharField(max_length = 255, source='productcode')
     description = serializers.CharField(max_length = 255,source='productdescription')
-    price = serializers.DecimalField(max_digits=10, decimal_places=2,source='buyprice')
+    price = serializers.FloatField(source='buyprice')
     category_id = serializers.IntegerField(source='categoryid.categoryid',read_only=True)
     category = serializers.CharField(source='categoryid.categorydescription',write_only=True,max_length = 255)
     enabled = serializers.IntegerField(read_only = True)
