@@ -77,13 +77,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
 
-        # DB Details here
-        # 'ENGINE':
-        # 'NAME':
-        # 'USER':
-        # 'PASSWORD':
-        # 'HOST':
-        # 'PORT':
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cnu2016_abansal',
+        'USER': 'abansal',
+        'PASSWORD': 'abansal',
+        'HOST': 'aline-cnu-insights-dev-cluster.cluster-czuocyoc6awe.us-east-1.rds.amazonaws.com',
+        'PORT': '3306'
     }
 }
 
