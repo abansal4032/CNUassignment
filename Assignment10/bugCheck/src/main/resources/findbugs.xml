@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindbugsPlugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="findbugsplugin.xsd"
+                pluginid="com.cnu2016.bugCheck.threadBug" provider="archit">
+    <Detector class="com.cnu2016.bugCheck.threadBug" speed="fast" reports="THREAD_ERROR, RUNNABLE"/>
+    <BugPattern type="THREAD_ERROR" abbrev="DEMO" category="TEST_BUG" />
+    <BugPattern type="RUNNABLE" abbrev="DEMO" category="TEST_BUG" />
+</FindbugsPlugin>

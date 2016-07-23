@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="messagecollection.xsd">
+
+    <Detector class="com.cnu2016.bugCheck.threadBug">
+        <Details>
+            <![CDATA[<p>This detector warns about static fields of type java.util.Calendar or java.text.DateFormat (and subclasses) because Calendars are inherently unsafe for multithreaded use. It is a fast detector.</p>]]>
+        </Details>
+    </Detector>
+
+    <BugPattern type="THREAD_ERROR">
+        <ShortDescription>Thread Error </ShortDescription>
+        <LongDescription>Did you intend to use Thread.run() to create a new execution thread?</LongDescription>
+        <Details>Thread.run() called directly in Class: {0} Method is : {1}. Line is: {2} .</Details>
+    </BugPattern>
+
+    <BugPattern type="RUNNABLE">
+        <ShortDescription>Runnable called</ShortDescription>
+        <LongDescription>Did you intend to use Runnable.run() to create a new execution thread?</LongDescription>
+        <Details>Runnable.run() called directly in Class: {0} Method is : {1}. Line is: {2} .</Details>
+    </BugPattern>
+
+    <BugCode abbrev="DEMO">Thread.run() called</BugCode>
+
+</MessageCollection>
