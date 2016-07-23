@@ -1,0 +1,4 @@
+FileName, StartLineNumber, EndLineNumber, Violation String
+com.cnu2016.bugHelper.bugHelper.java, 19, 19, Did you intend to use Thread.run() to create a new execution thread?
+com.cnu2016.bugHelper.bugHelper.java, 25, 25, Did you intend to put run() method in new thread?
+com.cnu2016.bugHelper.bugHelper.java, 27, 27, Did you intend to use Thread.run() to create a new execution thread?
